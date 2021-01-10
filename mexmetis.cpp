@@ -92,8 +92,8 @@ void mexFunction(
         ai[i]=(int)pi[i]-1;aj[i]=(int)pj[i]-1;
     }
     constructgraph();
-    cout<<"read finished."<<endl;
-	cout<<M<<","<<SIZE<<endl;
+    //cout<<"read finished."<<endl;
+	//cout<<M<<","<<SIZE<<endl;
 	
     int nvtx=SIZE;int ncon=1;double ubvec[]={1.5};
     int totv=0;
@@ -107,9 +107,9 @@ void mexFunction(
     int res=METIS_PartGraphRecursive(&nvtx,&ncon,gra.xadj,gra.adjncy,NULL,NULL,NULL,&nparts,NULL,NULL,options,&totv,part);
     clock_t end=clock();
     if(res==METIS_OK){
-        cout<<"Succeed."<<endl;
-        cout<<"Interface nodes: "<<totv<<endl;
-        cout<<"Metis time: "<<(double)(end-begin)/CLOCKS_PER_SEC<<endl;    
+  //      cout<<"Succeed."<<endl;
+  //      cout<<"Interface nodes: "<<totv<<endl;
+  //      cout<<"Metis time: "<<(double)(end-begin)/CLOCKS_PER_SEC<<endl;    
     }
     int* nums=(int*) malloc(sizeof(int)*(nparts+1));
     memset(nums,0,sizeof(int)*(nparts+1));
