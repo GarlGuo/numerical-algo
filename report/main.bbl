@@ -1,0 +1,36 @@
+\begin{thebibliography}{1}
+
+\bibitem{Metis}
+G.~Karypis.
+\newblock Metis - serial graph partitioning and fill-reducing matrix ordering.
+\newblock \url{https://github.com/KarypisLab/METIS}.
+
+\bibitem{MLR}
+R.~Li and Y.~Saad.
+\newblock Divide and conquer low-rank preconditioners for symmetric matrices.
+\newblock {\em SIAM Journal on Scientific Computing}, 35(4):A2069--A2095, 2013.
+
+\bibitem{SLR}
+Y.Xi R.~Li and Y.~Saad.
+\newblock Schur complement-based domain decomposition preconditioners with
+  low-rank corrections.
+\newblock {\em Numerical Linear Algebra with Applications}, 26:706--729, 2016.
+
+\bibitem{Course}
+Y.~Saad.
+\newblock A short course on: Preconditioned krylov subspace methods.
+\newblock \url{https://www-users.cs.umn.edu/~saad/Calais/PREC.pdf}.
+
+\bibitem{Iter}
+Y.~Saad.
+\newblock {\em Iterative Methods for Sparse Linear Systems}.
+\newblock Society for Industrial and Applied Mathematics, 2003.
+
+\bibitem{Sparse}
+W.~Yu Z.~Liu and Z.Feng.
+\newblock fegrass: Fast and effective graph spectral sparsification for
+  scalable power grid analysis.
+\newblock {\em IEEE Transactions on Computer-Aided Design of Integrated
+  Circuits and Systems}.
+
+\end{thebibliography}
