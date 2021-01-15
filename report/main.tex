@@ -293,14 +293,15 @@
 \section{\T{基于舒尔补的低秩修正预条件子 (SLR)}}
 \subsection{\T{区域分解法}}
 \T{划分子区域}
+\T{对于矩阵A，我们可以图切割（按边进行划分，方法和\ref{metis_res}的$B_i$的处理类似）}
 \begin{figure}[H]
-	\caption{...\cite{SLR}}
+	\label{SLR-1}
+	\caption{按边划分矩阵\cite{SLR}}
 	\centering
 	\includegraphics[width=300pt,height=120pt]{SLR.png}
 \end{figure}
 \T{构造边界方程并求解}
-\begin{equation}
-	\begin{aligned}
+\begin{gather}
 		A \begin{bmatrix}
 			x \\ y
 		\end{bmatrix} = \begin{bmatrix}
@@ -308,18 +309,57 @@
 		\end{bmatrix} \quad A = \begin{bmatrix}
 			B & E \\ F & C
 		\end{bmatrix} \\ 
-		x = B^{-1}(f - E y) \quad 
-		(C - F B ^{-1} E) y = g - F B^{-1} f
-	\end{aligned}
-\end{equation}
-
+		\begin{cases}
+			x = B^{-1}(f - E y) \\
+			(C - F B ^{-1} E) y = g - F B^{-1} f
+		\end{cases}
+\end{gather}
+\T{构造舒尔补$S=C−FB^{−1}E$需要求解\red{$s$}次$B$
+}
 \subsection{\T{区域分解类型的预条件子(DD-type Preconditioner)}}
+\begin{equation}
+	S^{-1} \approx C^{-1}
+\end{equation}
+\T{预条件子求解仅需求解 \red{2} 次𝐵}
 
+\begin{equation}
+	S^{-1} \approx C^{-1} + LRC
+\end{equation}
+\T{引入矩阵$H$并做近似谱分解}
+\[
+	H = L^{-1}E^TB^{-1}EL^{-T} \approx UDU^T
+\]
+舒尔补$S$满足
+\begin{itemize}
+	\item 
+	\begin{equation}
+		S = L(I - H)L^T
+	\end{equation}
+		
 
+	\item 
+	\begin{gather}
+		\begin{split}
+			S^{-1} = L^{-T} (I - H)^{-1}L^{-1} \approx L^{-T} U (I - D)^{-1} U^T L^{-1} \\
+			= C^{-1} + L^{-T} U[(I - D)^{-1} - I]U^TL^{-1}
+		\end{split}
+	\end{gather}
+		
+\end{itemize}
 
 \section{\T{非对称矩阵稀疏化}}
 % .7
-\cite{Sparse}
+\begin{equation}
+	A = D + L + U
+\end{equation}
+\T{将上三角部分和下三角部分分别看成两个无向图}
+\T{使用无向图稀疏化 feGRASS}
+\T{负数边权值处理为一个极小的正数}
+\begin{equation}
+	\tag{...\cite{Sparse}}
+	M = D + \tilde{L} + \tilde{U}
+\end{equation}
+
 
 
 
