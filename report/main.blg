@@ -9,50 +9,54 @@ Name 1 in "R. Li, Y.Xi, and Y. Saad" has a comma at the end for entry SLR
 while executing---line 1049 of file plain.bst
 Name 1 in "Z. Liu, W. Yu, and Z.Feng" has a comma at the end for entry Sparse
 while executing---line 1049 of file plain.bst
+Name 1 in "T.A. Davis, and Y. Hu" has a comma at the end for entry Test
+while executing---line 1049 of file plain.bst
+Name 1 in "T.A. Davis, and Y. Hu" has a comma at the end for entry Test
+while executing---line 1090 of file plain.bst
 Name 1 in "R. Li, Y.Xi, and Y. Saad" has a comma at the end for entry SLR
 while executing---line 1090 of file plain.bst
 Name 1 in "Z. Liu, W. Yu, and Z.Feng" has a comma at the end for entry Sparse
 while executing---line 1090 of file plain.bst
 Warning--empty year in Sparse
-You've used 6 entries,
+You've used 7 entries,
             2118 wiz_defined-function locations,
-            533 strings with 4874 characters,
-and the built_in function-call counts, 1563 in all, are:
-= -- 147
-> -- 60
+            540 strings with 4994 characters,
+and the built_in function-call counts, 1814 in all, are:
+= -- 171
+> -- 73
 < -- 0
-+ -- 25
-- -- 18
-* -- 85
-:= -- 271
-add.period$ -- 18
-call.type$ -- 6
-change.case$ -- 26
++ -- 31
+- -- 22
+* -- 101
+:= -- 317
+add.period$ -- 21
+call.type$ -- 7
+change.case$ -- 31
 chr.to.int$ -- 0
-cite$ -- 7
-duplicate$ -- 58
-empty$ -- 141
-format.name$ -- 18
-if$ -- 327
+cite$ -- 8
+duplicate$ -- 68
+empty$ -- 159
+format.name$ -- 22
+if$ -- 377
 int.to.chr$ -- 0
-int.to.str$ -- 6
-missing$ -- 5
-newline$ -- 33
-num.names$ -- 12
-pop$ -- 37
+int.to.str$ -- 7
+missing$ -- 6
+newline$ -- 38
+num.names$ -- 14
+pop$ -- 40
 preamble$ -- 1
-purify$ -- 21
+purify$ -- 25
 quote$ -- 0
-skip$ -- 45
+skip$ -- 54
 stack$ -- 0
-substring$ -- 85
-swap$ -- 6
+substring$ -- 91
+swap$ -- 7
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 22
+type$ -- 26
 warning$ -- 1
-while$ -- 14
-width$ -- 7
-write$ -- 61
-(There were 4 error messages)
+while$ -- 16
+width$ -- 8
+write$ -- 72
+(There were 6 error messages)

@@ -100,7 +100,7 @@
 	% args of funcs
 	morekeywords=[2]{on, off, interp},
 	% user funcs
-	morekeywords=[3]{FindESS, homework_example},
+	morekeywords=[3]{FindESS, homework\_example},
 	morecomment=[l][\color{Blue}]{...},     % line continuation (...) like blue comment
 	numbers=left,
 	numberstyle=\tiny\color{Blue},
@@ -174,6 +174,7 @@
 \chead{\T{“高等数值算法与应用”期末Project报告（2020年秋季学期）}}
 \rfoot{\T{第}\thepage\T{页}}
 \usepackage{multirow}
+\usepackage{multicol}
 
 
 
@@ -216,7 +217,7 @@
 
 \section{\T{多级低秩修正预条件子方法 (MLR)}}
 \subsection{\T{图分割}}
-\T{我们知道块Jacobi预条件子M = $\text{diag}(A_{11}, \ldots, A_{nn})$ 易于并行，但假如对对角块做完全分解则消耗内存大，假如做不完全分解迭代步数还是会很高, 但对于$A = \begin{bmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{bmatrix}$, 我们可以选$B = \begin{bmatrix} A_{11} & \\ & A_{22} \end{bmatrix}$， 然后做一个低秩近似使得 $M^{-1}=B^{−1}+LRC$
+\T{我们知道块Jacobi预条件子$M = \text{diag}(A_{11}, \ldots, A_{nn})$ 易于并行，但假如对对角块做完全分解则消耗内存大，假如做不完全分解迭代步数还是会很高, 但对于$A = \begin{bmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{bmatrix}$, 我们可以选$B = \begin{bmatrix} A_{11} & \\ & A_{22} \end{bmatrix}$， 然后做一个低秩近似使得 $M^{-1}=B^{−1}+LRC$
 }
 
 
@@ -274,10 +275,12 @@
 
 \subsection{\T{多级方法}}
 \T{我们可以进一步扩展低秩修正预条件子到多级的情况。首先，我们可以将对角块$A_i$写成$B_i - E_i E_i^T, \ B = \begin{pmatrix} B_{i_1} & \\ & B_{i_2} \end{pmatrix}$。 我们可以进一步展开$A_i^{-1}$来得到$M_i^{-1}$}
-\begin{align}
-	M_i^{-1} \equiv A_i^{-1} \approx B_i^{-1} + U_i H_i U_i^T \\ = \begin{pmatrix} A_{i_1} & \\ & A_{i_2} \end{pmatrix} + U_i H_i U_i^T \\
-	\approx \begin{pmatrix} M_{i_1} & \\ & M_{i_2} \end{pmatrix} + U_i H_i U_i^T \\
-\end{align}
+\begin{gather}
+	\begin{aligned}
+		M_i^{-1} &\equiv A_i^{-1} \approx B_i^{-1} + U_i H_i U_i^T \\ &= \begin{pmatrix} A_{i_1}^{-1} & \\ & A_{i_2}^{-1} \end{pmatrix} + U_i H_i U_i^T \\
+		&\approx \begin{pmatrix} M_{i_1}^{-1} & \\ & M_{i_2}^{-1} \end{pmatrix} + U_i H_i U_i^T \\
+	\end{aligned}
+\end{gather}
 \T{我们最后可以得到以下多级递推式(MLR)}
 \begin{equation}
 	\tag*{\T{MLR递归式\cite{MLR}}}
@@ -291,8 +294,6 @@
 \end{equation}
 
 \section{\T{基于舒尔补的低秩修正预条件子 (SLR)}}
-\subsection{\T{区域分解法}}
-\T{划分子区域}
 \T{对于矩阵A，我们可以图切割（按边进行划分，方法和\ref{metis_res}的$B_i$的处理类似）}
 \begin{figure}[H]
 	\label{SLR-1}
@@ -314,49 +315,85 @@
 			(C - F B ^{-1} E) y = g - F B^{-1} f
 		\end{cases}
 \end{gather}
-\T{构造舒尔补$S=C−FB^{−1}E$需要求解\red{$s$}次$B$
+\T{构造舒尔补$S = C - F B^{-1} E$需要求解 \red{$s$} 次$B$。 我们此时需要构造一个$\hat{S}$来近似$S$, 然后得到预条件子$M = \begin{pmatrix}
+		I & \\ F B^{-1} & I
+	\end{pmatrix} \begin{pmatrix}
+	B & E \\ & \hat{S}
+\end{pmatrix}$
+一种直接的做法是用 $C^{-1}$ 来近似 $S^{-1}$, 此时预条件子求解仅需求解 \red{2} 次$B$
 }
-\subsection{\T{区域分解类型的预条件子(DD-type Preconditioner)}}
+\T{另一种做法是对$S$做低秩近似(SLR)}
 \begin{equation}
-	S^{-1} \approx C^{-1}
-\end{equation}
-\T{预条件子求解仅需求解 \red{2} 次𝐵}
-
-\begin{equation}
+	\label{SLR-2}
 	S^{-1} \approx C^{-1} + LRC
 \end{equation}
-\T{引入矩阵$H$并做近似谱分解}
-\[
-	H = L^{-1}E^TB^{-1}EL^{-T} \approx UDU^T
-\]
-舒尔补$S$满足
-\begin{itemize}
-	\item 
-	\begin{equation}
-		S = L(I - H)L^T
-	\end{equation}
-		
+\T{这时我们可以引入矩阵$H$做近似谱分解\cite{SLR}}
+\begin{equation}
+	H = L^{-1}E^TB^{-1}EL^{-T} = UDU^T, \quad U\text{\T{为酉矩阵}}, \ D = \text{diag}(\lambda_1, \ldots, \lambda_s)
+\end{equation}
+	
+\T{舒尔补$S$满足} 
+\begin{equation}
+	S = L(I - H)L^T
+\end{equation}
 
-	\item 
-	\begin{gather}
-		\begin{split}
-			S^{-1} = L^{-T} (I - H)^{-1}L^{-1} \approx L^{-T} U (I - D)^{-1} U^T L^{-1} \\
-			= C^{-1} + L^{-T} U[(I - D)^{-1} - I]U^TL^{-1}
-		\end{split}
-	\end{gather}
+\T{然后我们可以近似$S^{-1}$\cite{SLR}}	
+
+\begin{gather}
+	\begin{aligned}
+		S^{-1} &= L^{-T} (I - H)^{-1}L^{-1} \\ &= L^{-T} U (I - D)^{-1} U^T L^{-1} \\
+		&\approx L^{-T} U (I - \tilde{D})^{-1} U^T L^{-1} ,\quad \tilde{D} = \text{diag}(\tilde{\lambda_1}, \ldots, \tilde{\lambda_s}) \\
+		&\approx C^{-1} + L^{-T} U[(I - \tilde{D})^{-1} - I]U^TL^{-1}
+	\end{aligned}
+\end{gather}
+
+\T{R. Li, Y. Xi和Y. Saad在\cite{SLR}中提出了以下几种近似谱分解的做法，两种做法所带来的$S \tilde{S}^{-1}$的谱范数不同}
+\begin{multicols}{2}
+	\begin{itemize}
+		\item
+		\begin{equation}
+			\nonumber
+			\tilde{\lambda_i} = \begin{cases}
+				\lambda_i \quad &\T{ 假如 } i \leq k \\
+				0 \quad &\T{ 其他情况}
+			\end{cases}
+		\end{equation}
 		
-\end{itemize}
+		\item
+		\begin{equation}
+			\nonumber
+			\tilde{\lambda_i} = \begin{cases}
+				1 \quad & \T{ 假如 } i \leq k \\
+				1 - \lambda_i \quad & \T{ 其他情况}
+			\end{cases}
+		\end{equation}
+		
+		\item
+		\begin{equation}
+			\nonumber
+			\tilde{\lambda_i} = \begin{cases}
+				1 - (1 - \lambda_i) / \epsilon \quad & \T{ 假如 } i \leq k \\
+				0 \quad & \T{ 其他情况}
+			\end{cases}
+		\end{equation}
+	\end{itemize}
+\end{multicols}
+
+\T{但是我们最后采用的是用Matlab中eigs命令取前$k$个最大的特征值（我们测试用的$k$是20）}
+
 
 \section{\T{非对称矩阵稀疏化}}
 % .7
+\T{我们知道矩阵$A$可以分成对角矩阵$D$, 上对角/下对角矩阵$L, U$}
 \begin{equation}
 	A = D + L + U
 \end{equation}
-\T{将上三角部分和下三角部分分别看成两个无向图}
-\T{使用无向图稀疏化 feGRASS}
-\T{负数边权值处理为一个极小的正数}
+\T{我们可以将上三角部分和下三角部分分别看成两个无向图， 然后使用无向图稀疏化\cite{Sparse}。}
+\T{对于负数边，我们将其权值处理为一个极小的正数。}
+\T{我们可以得到以下预条件子\ref{feGRASS}}
 \begin{equation}
-	\tag{...\cite{Sparse}}
+	\label{feGRASS}
+	\tag{feGRASS预条件子}
 	M = D + \tilde{L} + \tilde{U}
 \end{equation}
 
@@ -365,35 +402,76 @@
 
 \section*{\T{实验与讨论}}
 % 1
-\begin{figure}[H]
-	\caption{\T{实验结果: 对称正定矩阵}}
-	\centering
-	\includegraphics[width=350pt,height=160pt]{SPD_res.png}
-\end{figure}
-\T{低秩修正技术确实能降低迭代步数，但是能否缩短迭代时间存疑}
-\T{在串行意义下，feGRASS效果明显强于其他方法
-}
+\T{因为不同的预条件子使用条件不同，我们分开用对称正定矩阵和一般非对称矩阵进行了测试，测试样例可以在\href{http://sparse.tamu.edu/}{SuiteSparse Matrix Collection}可以找到\cite{Test}}
+\begin{itemize}
+	\item[1] 对称正定矩阵
+	
+	\T{我们用对称正定矩阵作为输入，用PCG求解速度/每行填入数量测试了六种预条件子方法Ichol、feGRASS、Block Jacobi、DD type、MLR、SLR\footnote{Block Jacobi、DD type、MLR、SLR方法都划分为8个子区域，子区域内部使用Ichol}}
+	
+	\begin{center}
+		\begin{table}[H]
+			\caption{\T{测试矩阵参数}}
+			\begin{center}
+				\begin{tabular}{ c|c|c|c}
+					& size & NNZ (\T{百分比}) & \T{2-条件数} \\
+					\hline
+					Dubcova2 & 65025 * 65025 & 1030225 (.024\%) & 1.04e+04 \\
+					\hline
+					Dubcova3 & 146689 * 146689 & 3636643 (.017\%) & 1.15e+04 \\
+					\hline
+					Ecology2 & 999999 * 999999 & 4995991 (.0005\%) & 6.66e+07 \\
+					\hline
+					Thermal1 & 82654 * 82654 & 574458 (.0084\%) & 4.96e+05	\\
+					\hline
+					Thermal2 & 1228045 * 1228045 & 8580313 (.00057\%) & 7.48e+06 \\
+					\hline
+					Apache2 & 715176 * 715176 & 4817870 (.00094\%) & 5.32e+06 \\											
+				\end{tabular}
+			\end{center}
+		\end{table}
+	\end{center}
+	
+	\begin{figure}[H]
+		\caption{\T{对称正定矩阵实验结果}}
+		\centering
+		\includegraphics[width=350pt,height=160pt]{SPD_res.png}
+	\end{figure}
 
-\begin{figure}[H]
-	\caption{\T{实验结果: 非对称矩阵}}
-	\centering
-	\includegraphics[width=350pt,height=180pt]{normal.png}
-\end{figure}
 
-\T{低秩修正技术确实能降低迭代步数，但是能否缩短迭代时间存疑}
+	\T{经过测试，我们可以发现}
+	\begin{itemize}
+		\item \T{相比于块-Jacobi预条件子，低秩修正预条件子确实能降低迭代步数，但MLR是否能缩短迭代时间存疑}
+		
+		\item \T{SLR...}
+		
+		\item \T{对于相对稠密（非零元百分比较高）的矩阵(Dubcova2/Dubcova3), feGRASS技术迭代步数会显著高于其他预条件子, 但对于更加稀疏的矩阵，feGRASS技术的迭代速度会明显快于其他预条件子}
+		
+		\item \T{相比于其他5种预条件子，feGRASS可以明显减少填充元}
+	\end{itemize}
+	
+	
+	
+	\item[2] 一般非对称矩阵
+	
+	\T{对于Ilu、feGRASS方法，我们使用一般非对称矩阵作为输入源并使用GMRES求解(restart = 10)}
+	\begin{figure}[H]
+		\caption{\T{一般非对称矩阵实验结果}}
+		\centering
+		\includegraphics[width=350pt,height=180pt]{normal.png}
+	\end{figure}
+	\T{经过测试，我们可以发现}
+	\begin{itemize}
+		\item \T{非对称矩阵稀疏化方法优于ILU，但是存在着稀疏化以后奇异的问题}
+		\item \T{MATLAB ILU命令可能无法得到分解结果}
+	\end{itemize}
 
-\T{在串行意义下，feGRASS效果明显强于其他方法}
+\end{itemize}
+
 
 
 
 \section*{\T{总结}}
-% .5
-\T{针对对称正定矩阵，比较了六种预条件子}
-\T{主要是学习了低秩修正技术}
-\T{目前并未实现并行}
-
-\T{针对非对称矩阵，尝试了基于feGRASS的稀疏化方法}
-\T{效果一般}
+\T{我们这一次期末project主要学习并比较了几种预条件子。针对对称正定矩阵的预条件子，我们学习了低秩修正技术，Schur补修正技术，然后我们也对其性能做了一个初步的研究比较，但目前我们的实现还比较原始，未能实现完全并行计算。针对非对称矩阵，我们尝试了基于feGRASS的稀疏化方法并和ILU进行了性能比较，但目前结果显示效果一般}
 
 
 \renewcommand{\refname}{\T{参考文献}}
